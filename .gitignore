@@ -1,2 +1,3 @@
 history
-home/config/ranger/bookmarks
+.config/ranger/bookmarks
+.vimperator/info/default/history-command
