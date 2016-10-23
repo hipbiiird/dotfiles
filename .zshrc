@@ -605,5 +605,4 @@ fi
 # プラグインを読み込み、コマンドにパスを通す
 zplug load --verbose
 
-alias brew="env PATH=${PATH/\/Users\/EM\/\.anyenv\/envs\/pyenv\/shims:/} brew"
 export EDITOR=nvim
