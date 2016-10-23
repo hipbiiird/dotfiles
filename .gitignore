@@ -1,3 +1,5 @@
 history
 .config/ranger/bookmarks
 .vimperator/info/default/history-command
+.config/nvim/.vim
+.vimperator/info/
