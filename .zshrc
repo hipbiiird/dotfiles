@@ -75,6 +75,7 @@ fi
 # ranger
 # -------------------------------------
 # サブシェルを入れ子にしない
+
 function ranger() {
     if [ -z "$RANGER_LEVEL" ]; then
         /usr/local/bin/ranger $@
@@ -86,16 +87,8 @@ function ranger() {
 [ -n "$RANGER_LEVEL" ] && PS1="$PS1"'(in ranger) '
 
 # -------------------------------------
-# dot
-# -------------------------------------
-
-export DOT_REPO="https://HipBird@bitbucket.org/HipBird/dotfiles.git"
-export DOT_DIR="$HOME/.dotfiles"
-
-# -------------------------------------
 # Utilities
 # -------------------------------------
-
 # ostype returns the lowercase OS name
 ostype() {
     # shellcheck disable=SC2119
@@ -219,10 +212,8 @@ if is_osx; then
     alias lb='open -a LaunchBar "$@"'
     alias ls='ls -GF'
     alias emacs='emacs -nw'
-fi
-
-if is_linux; then
-    alias ls='ls -F --color'
+    alias -g CP='| pbcopy'
+    alias -g CC='| tee /dev/tty | pbcopy'
 fi
 
 if has 'git'; then
@@ -243,6 +234,30 @@ if has "gomi"; then
     alias -g D="| gomi"
 fi
 
+if has "emojify"; then
+    alias -g E='| emojify'
+fi
+
+cat_alias() {
+    local i stdin file=0
+    stdin=("${(@f)$(cat <&0)}")
+    for i in "${stdin[@]}"
+    do
+        if [[ -f $i ]]; then
+            cat "$@" "$i"
+            file=1
+        fi
+    done
+    if [[ $file -eq 0 ]]; then
+        echo "${(F)stdin}"
+    fi
+}
+alias -g C="| cat_alias"
+
+# less
+alias -g L="| cat_alias | less"
+alias -g LL="| less"
+
 pygmentize_alias() {
     if has "pygmentize"; then
         local get_styles styles style
@@ -251,13 +266,46 @@ pygmentize_alias() {
         print('\n'.join(styles))"
         styles=( $(sed -e 's/^  *//g' <<<"$get_styles" | python) )
 
-        style=${${(M)styles:#monokai}:-default}
+        style=${${(M)styles:#solarized}:-default}
         cat_alias "$@" | pygmentize -O style="$style" -f console256 -g
     else
         cat -
     fi
 }
 alias -g P="| pygmentize_alias"
+
+awk_alias() {
+    autoload -Uz is-at-least
+    if ! is-at-least 5; then
+        return 1
+    fi
+
+    local -a opts
+    local    field=0 pattern
+
+    while (( $# > 0 ))
+    do
+        case "$1" in
+            -*|--*)
+                opts+=( "$1" )
+                ;;
+            *)
+                if [[ $1 =~ ^[0-9]+$ ]]; then
+                    field="$1"
+                else
+                    pattern="$1"
+                fi
+                ;;
+        esac
+        shift
+    done
+
+    if ! awk ${=opts[@]} "$pattern{print $"$field"}" 2>/dev/null; then
+        printf "Galias: syntax error\n"
+        return 1
+    fi
+}
+alias -g A="| awk_alias"
 
 mru() {
     local -a f
@@ -319,7 +367,7 @@ HELP
                         styles = list(get_all_styles())
                         print('\n'.join(styles))"
                         styles=( $(sed -e 's/^  *//g' <<<"$get_styles" | python) )
-                        style=${${(M)styles:#monokai}:-default}
+                        style=${${(M)styles:#solarized}:-default}
                         export LESSOPEN="| pygmentize -O style=$style -f console256 -g %s"
                     fi
                     less "${(@f)res}" < /dev/tty > /dev/tty
@@ -365,13 +413,6 @@ git_branch() {
 }
 
 alias -g GB='$(git_branch)'
-
-if has "tw"; then
-    alias -g TW="| tw --pipe"
-    if has "emojify"; then
-        alias -g TW="| emojify | tw --pipe"
-    fi
-fi
 
 git_modified_files() {
     is_git_repo || return
@@ -520,10 +561,10 @@ source ~/.zplug/init.zsh || { git clone https://github.com/b4b4r07/zplug.git ~/.
 
 zplug 'b4b4r07/zplug', at:v2  # don't forget to zplug update --self && zplug update
 
-    local user_symbol="$"
-    if [[ $(print -P "%#") =~ "#" ]]; then
-        user_symbol = "#"
-    fi
+local user_symbol="$"
+if [[ $(print -P "%#") =~ "#" ]]; then
+  user_symbol = "#"
+fi
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vi_mode context dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
@@ -531,10 +572,10 @@ POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-    local user_symbol="$"
-    if [[ $(print -P "%#") =~ "#" ]]; then
-        user_symbol = "#"
-    fi
+local user_symbol="$"
+if [[ $(print -P "%#") =~ "#" ]]; then
+  user_symbol = "#"
+fi
 POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="%{%B%F{white}%K{blue}%} $user_symbol%{%b%f%k%F{blue}%} %{%f%}"
 export DEFAULT_USER="$USER"
 
@@ -581,9 +622,6 @@ zplug 'zsh-users/zsh-history-substring-search'
 zplug 'zsh-users/zsh-syntax-highlighting', \
     nice:19
 
-zplug "ssh0/dot", \
-    use:"*.sh"
-
 zplug "urbainvaes/fzf-marks"
 
 # check コマンドで未インストール項目があるかどうか verbose にチェックし
@@ -596,13 +634,9 @@ if ! zplug check --verbose; then
     fi
 fi
 
-
-
 if [ -f $(brew --prefix)/etc/brew-wrap ];then
   source $(brew --prefix)/etc/brew-wrap
 fi
-
 # プラグインを読み込み、コマンドにパスを通す
 zplug load --verbose
 
-export EDITOR=nvim
