@@ -213,8 +213,12 @@ repo = 'lilydjwg/colorizer'
 on_ft = ['html', 'css', 'less', 'scss']
 
 [[plugins]]
-repo = 'tomtom/tcomment_vim'
+repo = 'tyru/caw.vim'
 on_path = '.*'
+hook_add = '''
+  nmap <Leader>/ <Plug>(caw:i:toggle)
+  vmap <Leader>/ <Plug>(caw:i:toggle)
+'''
 
 [[plugins]]
 repo = 'itspriddle/vim-marked'

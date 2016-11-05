@@ -75,8 +75,8 @@ repo = 'kana/vim-textobj-entire'
 [[plugins]]
 repo = 'kana/vim-operator-user'
 
-[[plugins]]
-repo = 'Shougo/neosnippet-snippets'
+# [[plugins]]
+# repo = 'Shougo/neosnippet-snippets'
 
 # [[plugins]]
 # repo = 'nathanaelkane/vim-indent-guides'

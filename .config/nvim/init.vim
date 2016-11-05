@@ -23,6 +23,9 @@ augroup MyAutoGroup
 augroup END
 " }}}
 
+" スペースにLeaderキーを割当
+ let mapleader = "\<Space>"
+
 " 外部ファイルを source {{{
 function! s:source_rc(path, ...) abort "{{{
   let use_global = get(a:000, 0, !has('vim_starting'))
@@ -335,10 +338,6 @@ call s:my_on_filetype()
 " }}}
 
 " ##### キーマップ ##### {{{
-" 共通
-
-" スペースにLeaderキーを割当
-let mapleader = "\<Space>"
 
 " Visualモード {{{
 " <TAB>: indent.
@@ -414,23 +413,6 @@ if dein#tap('vim-findent') "{{{
   "nnoremap <silent> [Space]i    :<C-u>Findent! --no-warnings<CR>
 endif"}}}
 
-if dein#tap('tcomment_vim') "{{{
-  " Space + / コメントをトグル
-  nmap <Leader>/ <C-_><C-_>
-  vmap <Leader>/ <C-_><C-_>
-
-  if !exists( 'g:tcomment_types' )
-    let g:tcomment_types = {}
-  endif
-  let g:tcomment_types = {
-        \'php_surround' : "<?php %s ?>",
-        \'php_surround_echo' : "<?php echo %s ?>"
-        \}
-  au FileType php imap <buffer><C-_>c :TCommentAs php_surround<CR>
-  au FileType php imap <buffer><C-_>= :TCommentAs php_surround_echo<CR>
-  au FileType php imap <buffer><C-_>e :TCommentAs php_surround_echo<CR>
-endif"}}}
-
 if dein#tap('vim-expand-region') "{{{
   vmap v <Plug>(expand_region_expand)
   vmap <C-v> <Plug>(expand_region_shrink)
@@ -449,42 +431,44 @@ if dein#tap('vim-expand-region') "{{{
         \ }
 endif"}}}
 
+if dein#tap('lightline.vim') "{{{
+  function! LightLineModified()
+    if &filetype == "help"
+      return ""
+    elseif &modified
+      return "+"
+    elseif &modifiable
+      return ""
+    else
+      return ""
+    endif
+  endfunction
 
-function! LightLineModified()
-  if &filetype == "help"
-    return ""
-  elseif &modified
-    return "+"
-  elseif &modifiable
-    return ""
-  else
-    return ""
+  function! LightLineReadonly()
+    if &filetype == "help"
+      return ""
+    elseif &readonly
+      return "⭤"
+    else
+      return ""
+    endif
+  endfunction
+
+  if dein#tap('vim-fugitive')
+    function! LightLineFugitive()
+      if exists("*fugitive#head")
+        let branch = fugitive#head()
+        return branch !=# '' ? '⭠ '.branch : ''
+      endif
+      return ''
+    endfunction
   endif
-endfunction
 
-function! LightLineReadonly()
-  if &filetype == "help"
-    return ""
-  elseif &readonly
-    return "⭤"
-  else
-    return ""
-  endif
-endfunction
-
-function! LightLineFugitive()
-  if exists("*fugitive#head")
-    let branch = fugitive#head()
-    return branch !=# '' ? '⭠ '.branch : ''
-  endif
-  return ''
-endfunction
-
-function! LightLineFilename()
-  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
-       \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
-endfunction
-
+  function! LightLineFilename()
+    return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+  endfunction
+endif"}}}
 " }}}
 
