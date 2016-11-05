@@ -12,29 +12,29 @@ hook_source = 'call echodoc#enable()'
 #   source ~/.config/nvim/rc/plugins/deoplete.rc.vim
 # '''
 
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_i = 1
-on_ft = 'snippet'
-hook_add = '''
-  " imap <silent>L     <Plug>(neosnippet_jump_or_expand)
-  " smap <silent>L     <Plug>(neosnippet_jump_or_expand)
-  " xmap <silent>L     <Plug>(neosnippet_expand_target)
-  " imap <silent>K     <Plug>(neosnippet_expand_or_jump)
-  " smap <silent>K     <Plug>(neosnippet_expand_or_jump)
-  " imap <silent>G     <Plug>(neosnippet_expand)
-  " xmap <silent>o     <Plug>(neosnippet_register_oneshot_snippet)
-
-  let g:neosnippet#enable_snipmate_compatibility = 1
-  let g:neosnippet#enable_complete_done = 1
-  let g:neosnippet#expand_word_boundary = 1
-
-  " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
-  let g:neosnippet#snippets_directory = '~/.vim/snippets'
-
-  inoremap <silent> (( <C-r>=neosnippet#anonymous('\left(${1}\right)${0}')<CR>
-'''
+# [[plugins]]
+# repo = 'Shougo/neosnippet.vim'
+# depends = ['neosnippet-snippets', 'context_filetype.vim']
+# on_i = 1
+# on_ft = 'snippet'
+# hook_add = '''
+#   " imap <silent>L     <Plug>(neosnippet_jump_or_expand)
+#   " smap <silent>L     <Plug>(neosnippet_jump_or_expand)
+#   " xmap <silent>L     <Plug>(neosnippet_expand_target)
+#   " imap <silent>K     <Plug>(neosnippet_expand_or_jump)
+#   " smap <silent>K     <Plug>(neosnippet_expand_or_jump)
+#   " imap <silent>G     <Plug>(neosnippet_expand)
+#   " xmap <silent>o     <Plug>(neosnippet_register_oneshot_snippet)
+#
+#   let g:neosnippet#enable_snipmate_compatibility = 1
+#   let g:neosnippet#enable_complete_done = 1
+#   let g:neosnippet#expand_word_boundary = 1
+#
+#   " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
+#   let g:neosnippet#snippets_directory = '~/.vim/snippets'
+#
+#   inoremap <silent> (( <C-r>=neosnippet#anonymous('\left(${1}\right)${0}')<CR>
+# '''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -74,9 +74,9 @@ repo = 'thinca/vim-scouter'
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 
-[[plugins]]
-repo = 'ujihisa/neco-look'
-on_source = ['deoplete.nvim']
+# [[plugins]]
+# repo = 'ujihisa/neco-look'
+# on_source = ['deoplete.nvim']
 
 # [[plugins]]
 # repo = 'yonchu/accelerated-smooth-scroll'
@@ -224,6 +224,10 @@ hook_add = '''
     let g:marked_app = "Marked 2"
   endif
 '''
+
+[[plugins]]
+repo = 'zaiste/tmux.vim'
+on_ft = 'tmux'
 
 # [[plugins]]
 # repo = 'Valloric/MatchTagAlways'
