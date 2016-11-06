@@ -14,4 +14,4 @@
 [color]
 	ui = true
 [commit]
-	template = /Users/EM/.stCommitMsg
+	template = ~/.gitmessage.txt
