@@ -370,8 +370,8 @@ inoremap <silent> っｋ <ESC>`^
 "行頭/行末移動
 noremap gh  ^
 noremap gl  $
-inoremap <Leader>h <HOME>
-inoremap <Leader>l <END>
+" inoremap <Leader>h <HOME>
+" inoremap <Leader>l <END>
 "tabの入力
 inoremap <C-t> <C-v><TAB>
 " undo <C-w> and <C-u>.
