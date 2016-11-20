@@ -9,9 +9,15 @@
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [user]
-	name = HipBird
-	email = proximity.mining@gmail.com
+	name = m43d4k
+	email = m43d4k@gmail.com
 [color]
 	ui = true
 [commit]
 	template = ~/.gitmessage.txt
+[ghq]
+	root = ~/.ghq
+[merge]
+	ff = false
+[pull]
+	ff = only
