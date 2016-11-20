@@ -454,6 +454,7 @@ git_modified_files() {
 }
 alias -g GG='$(git_modified_files)'
 
+alias g='cd $(ghq root)/$(ghq list | peco)'
 
 # -------------------------------------
 # keybinds
