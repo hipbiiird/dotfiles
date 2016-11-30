@@ -3,38 +3,31 @@ repo = 'Shougo/echodoc.vim'
 on_event = 'CompleteDone'
 hook_source = 'call echodoc#enable()'
 
-# [[plugins]]
-# repo = 'Shougo/deoplete.nvim'
-# depends = 'context_filetype.vim'
-# on_i = 1
-# hook_source = '''
-#   let g:deoplete#enable_at_startup = 1
-#   source ~/.config/nvim/rc/plugins/deoplete.rc.vim
-# '''
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+depends = 'context_filetype.vim'
+if = "has('lua')"
+on_event = 'InsertEnter'
+hook_source = '''
+  let g:neocomplete#enable_at_startup = 1
+  source ~/.vim/rc/plugins/neocomplete.rc.vim
+'''
 
-# [[plugins]]
-# repo = 'Shougo/neosnippet.vim'
-# depends = ['neosnippet-snippets', 'context_filetype.vim']
-# on_i = 1
-# on_ft = 'snippet'
-# hook_add = '''
-#   " imap <silent>L     <Plug>(neosnippet_jump_or_expand)
-#   " smap <silent>L     <Plug>(neosnippet_jump_or_expand)
-#   " xmap <silent>L     <Plug>(neosnippet_expand_target)
-#   " imap <silent>K     <Plug>(neosnippet_expand_or_jump)
-#   " smap <silent>K     <Plug>(neosnippet_expand_or_jump)
-#   " imap <silent>G     <Plug>(neosnippet_expand)
-#   " xmap <silent>o     <Plug>(neosnippet_register_oneshot_snippet)
-#
-#   let g:neosnippet#enable_snipmate_compatibility = 1
-#   let g:neosnippet#enable_complete_done = 1
-#   let g:neosnippet#expand_word_boundary = 1
-#
-#   " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
-#   let g:neosnippet#snippets_directory = '~/.vim/snippets'
-#
-#   inoremap <silent> (( <C-r>=neosnippet#anonymous('\left(${1}\right)${0}')<CR>
-# '''
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+depends = ['neosnippet-snippets', 'context_filetype.vim']
+on_event = 'InsertCharPre'
+on_ft = 'snippet'
+hook_source = '''
+  imap <silent>L     <Plug>(neosnippet_jump_or_expand)
+  smap <silent>L     <Plug>(neosnippet_jump_or_expand)
+  xmap <silent>L     <Plug>(neosnippet_expand_target)
+  let g:neosnippet#enable_snipmate_compatibility = 1
+  let g:neosnippet#enable_complete_done = 1
+  let g:neosnippet#expand_word_boundary = 1
+
+  let g:neosnippet#snippets_directory = '~/.vim/snippets'
+'''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -49,12 +42,12 @@ on_if = 1
 
 [[plugins]]
 repo = 'Shougo/neco-syntax'
-on_source = ['deoplete.nvim']
+on_source = ['neocomplete.vim', 'deoplete.nvim']
 
-[[plugins]]
-repo = 'Shougo/vinarise.vim'
-on_cmd = 'Vinarise'
-hook_add = 'let g:vinarise_enable_auto_detect = 1'
+# [[plugins]]
+# repo = 'Shougo/vinarise.vim'
+# on_cmd = 'Vinarise'
+# hook_add = 'let g:vinarise_enable_auto_detect = 1'
 
 [[plugins]]
 repo = 'kana/vim-niceblock'
@@ -74,9 +67,9 @@ repo = 'thinca/vim-scouter'
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 
-# [[plugins]]
-# repo = 'ujihisa/neco-look'
-# on_source = ['deoplete.nvim']
+[[plugins]]
+repo = 'ujihisa/neco-look'
+on_source = ['neocomplete.vim', 'deoplete.nvim']
 
 # [[plugins]]
 # repo = 'yonchu/accelerated-smooth-scroll'
@@ -130,16 +123,17 @@ repo = 'lambdalisue/vim-findent'
 on_if = 1
 hook_add = '''
   " Note: It is too slow.
-  " autocmd MyAutoCmd BufRead * Findent! --no-warnings
-  nnoremap <silent> [Space]i    :<C-u>Findent! --no-warnings<CR>
+  autocmd MyAutoCmd BufRead * Findent! --no-warnings
+  " nnoremap <silent> [Space]i    :<C-u>Findent! --no-warnings<CR>
 '''
+
 [[plugins]]
 repo = 'Konfekt/FastFold'
 on_path = '.*'
 
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
-on_map = '<Plug>'
+on_map = {n = '<Plug>'}
 hook_add = '''
   nmap s <Plug>(easymotion-s2)
   xmap s <Plug>(easymotion-s2)
@@ -163,15 +157,15 @@ hook_add = '''
   hi link EasyMotionTarget2Second Type
 '''
 
-# [[plugins]]
-# repo = 'osyo-manga/vim-precious'
-# depends = 'context_filetype.vim'
-# on_i = 1
-# hook_source = '''
-#   let g:precious_enable_switch_CursorMoved = { '*': 0 }
-#   autocmd MyAutoGroup InsertEnter * PreciousSwitch
-#   autocmd MyAutoGroup InsertLeave * PreciousReset
-# '''
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = 'context_filetype.vim'
+on_i = 1
+hook_source = '''
+  let g:precious_enable_switch_CursorMoved = { '*': 0 }
+  autocmd MyAutoCmd InsertEnter * PreciousSwitch
+  autocmd MyAutoCmd InsertLeave * PreciousReset
+'''
 
 [[plugins]]
 repo = 'terryma/vim-expand-region'
@@ -204,8 +198,26 @@ on_path = '.*'
 [[plugins]]
 repo = 'mattn/emmet-vim'
 on_ft = ['html', 'css', 'javascript']
-hook_add = '''
-let g:user_emmet_leader_key = '<C-E>'
+hook_source = '''
+    let g:user_emmet_mode = 'i'
+    let g:user_emmet_leader_key='<C-E>'
+    let g:use_emmet_complete_tag = 1
+    let g:user_emmet_settings = {
+    \   'variables': {
+    \       'lang': "ja"
+    \   },
+    \   'indentation': '    '
+    \}
+'''
+
+repo = 'maksimr/vim-jsbeautify'
+on_ft = ['html', 'css', 'javascript']
+hook_source = '''
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
+autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 '''
 
 [[plugins]]
@@ -216,8 +228,8 @@ on_ft = ['html', 'css', 'less', 'scss']
 repo = 'tyru/caw.vim'
 on_path = '.*'
 hook_add = '''
-  nmap <Leader>/ <Plug>(caw:i:toggle)
-  vmap <Leader>/ <Plug>(caw:i:toggle)
+  nmap <Leader>/ <Plug>(caw:hatpos:toggle)
+  vmap <Leader>/ <Plug>(caw:hatpos:toggle)
 '''
 
 [[plugins]]
