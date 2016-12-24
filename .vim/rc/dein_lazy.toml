@@ -1,3 +1,4 @@
+
 [[plugins]]
 repo = 'Shougo/echodoc.vim'
 on_event = 'CompleteDone'
@@ -210,6 +211,23 @@ hook_source = '''
     \}
 '''
 
+[[plugins]]
+repo = 'kewah/vim-stylefmt'
+on_ft = ['css', 'less', 'scss', 'sass']
+hook_add = '''
+nnoremap <silent> <leader>cs :Stylefmt<CR>
+vnoremap <silent> <leader>cs :StylefmtVisual<CR>
+'''
+
+[[plugins]]
+repo = 'csscomb/vim-csscomb'
+on_ft = ['css', 'less', 'scss', 'sass']
+hook_add = '''
+" Map bc to run CSScomb. bc stands for beautify css
+autocmd FileType css noremap <buffer> <leader>bc :CSScomb<CR>
+'''
+
+[[plugins]]
 repo = 'maksimr/vim-jsbeautify'
 on_ft = ['html', 'css', 'javascript']
 hook_source = '''
@@ -222,7 +240,7 @@ autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 [[plugins]]
 repo = 'lilydjwg/colorizer'
-on_ft = ['html', 'css', 'less', 'scss']
+on_ft = ['html', 'css', 'less', 'scss', 'sass']
 
 [[plugins]]
 repo = 'tyru/caw.vim'
